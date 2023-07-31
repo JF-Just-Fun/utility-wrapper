@@ -1,14 +1,18 @@
 {
   "name": "utility-wrapper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Encapsulate some common and practical functions or classes",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.umd.js",
+  "jsdelivr": "dist/index.umd.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "test": "jest",
+    "prepare": "husky install",
     "build": "node ./scripts/exportAll.js && rollup -c"
   },
   "repository": {

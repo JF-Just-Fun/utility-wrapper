@@ -6,18 +6,18 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 
-const getPlugin = () => [resolve(), commonjs(), typescript(), terser()]
+const getPlugin = (tscOption = {}) => [resolve(), commonjs(), typescript({ tsconfigOverride: tscOption }), terser()]
 const getOutput = moduleName => [
   {
-    file: `dist/cjs/${moduleName}.cjs.js`,
+    file: `dist/cjs/${moduleName}/index.js`,
     format: 'cjs',
   },
   {
-    file: `dist/esm/${moduleName}.esm.js`,
+    file: `dist/esm/${moduleName}/index.js`,
     format: 'esm',
   },
   {
-    file: `dist/umd/${moduleName}.umd.js`,
+    file: `dist/umd/${moduleName}/index.js`,
     name: moduleName,
     format: 'umd',
   }
@@ -53,7 +53,12 @@ const separateModuleConfig = fs.readdirSync(srcDir).reduce((acc, file) => {
   return {
     input: `./src/${file}/index.ts`,
     output: getOutput(file),
-    plugins: getPlugin()
+    plugins: getPlugin({
+      "compilerOptions": {
+        "rootDir": `./src/${file}`
+      },
+      "include": [`./src/${file}/*.ts`]
+    })
   }
 })
 
