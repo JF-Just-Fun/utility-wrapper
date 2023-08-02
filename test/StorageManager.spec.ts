@@ -102,10 +102,11 @@ describe('StorageManager', () => {
     expect(localStorage.getItem('key-secret1')).not.toBe(JSON.stringify({ value: 'myValue', encryption: true }))
     expect(localStorage.getItem('key-secret2')).not.toBe(JSON.stringify({ value: 'myValue', encryption: true }))
 
-    SM.clear()
-
     SM.set('key-secret3', 'myValue', { encryption: true })
     expect(localStorage.getItem('key-secret3')).not.toBe(JSON.stringify({ value: 'myValue', encryption: true }))
-    SM.clear()
+    expect(SM.get('key-secret3')).toBe('myValue')
+
+    SM.set('key-secret4', 'myValue', { encryption: false })
+    expect(localStorage.getItem('key-secret4')).toBe(StorageManager.dataPrefix + JSON.stringify({ value: 'myValue', encryption: false}) + StorageManager.dataSuffix)
   });
 });

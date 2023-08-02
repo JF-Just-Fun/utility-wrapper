@@ -9,6 +9,8 @@ export default class StorageManager {
   private secretKey: string; // used for encryption and decryption
 
   static storageSizeLimit: number = 4000 * 1024; // localStorage limit is approximately 4MB
+  static dataPrefix: string = '[YIN%'; // prefix of StorageManager data structure
+  static dataSuffix: string = '%PO]'; // suffix of StorageManager data structure
 
   constructor (initialData: StorageDataType = {}, secretKey?: string) {
     this.secretKey = secretKey || 'yinpo-secret-key';
@@ -20,24 +22,24 @@ export default class StorageManager {
     }
   }
 
-  // Method to set data into localStorage
+  // set data into localStorage
   set(key: string, value: any, option?: { expire?: number, encryption?: boolean }): void {
     const item: ItemType = {
       value: option?.encryption ? this.encrypt(value) :  value,
-      encryption: option?.encryption ? option?.encryption : undefined,
+      encryption: option?.encryption ?? undefined,
       expire: option?.expire ? new Date().getTime() + option.expire : undefined
     }
 
-    localStorage.setItem(key, `[YIN%${JSON.stringify(item)}%PO]`);
+    localStorage.setItem(key, `${StorageManager.dataPrefix}${JSON.stringify(item)}${StorageManager.dataSuffix}`);
   }
 
-  // Method to get data from localStorage
+  // get data from localStorage
   get(key: string): any | null {
     let itemStr = localStorage.getItem(key);
     if (!itemStr) {
       return null;
     }
-    if (!itemStr.startsWith('[YIN%') || !itemStr.endsWith('%PO]')) {
+    if (!itemStr.startsWith(StorageManager.dataPrefix) || !itemStr.endsWith(StorageManager.dataSuffix)) {
       return itemStr
     }
     itemStr = itemStr.slice(5, -4)
@@ -50,17 +52,17 @@ export default class StorageManager {
     return item.encryption ? this.decrypt(item.value) : item.value;
   }
 
-  // Method to delete data from localStorage
+  // remove data from localStorage
   remove(key: string): void {
     localStorage.removeItem(key);
   }
 
-  // Method to clear all data from localStorage
+  // clear all data from localStorage
   clear(): void {
     localStorage.clear();
   }
 
-  // Method to display all data from localStorage
+  // display all data from localStorage
   all(): StorageDataType {
     let entries: { [key: string]: any } = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -74,12 +76,12 @@ export default class StorageManager {
     return entries;
   }
 
-  // Method to check if a key exists in localStorage
+  // check if a key exists in localStorage
   has(key: string): boolean {
     return this.get(key) !== null;
   }
 
-  // Method to get the total size of localStorage
+  // get the total size of localStorage
   getSize(): number {
     let totalSize = 0;
     for (let key in localStorage) {
@@ -90,7 +92,7 @@ export default class StorageManager {
     return totalSize;
   }
 
-  // Method to get the remaining size of localStorage
+  // get the remaining size of localStorage
   getRemainingSize(): number {
     const totalSize = this.getSize();
     return StorageManager.storageSizeLimit - totalSize;
