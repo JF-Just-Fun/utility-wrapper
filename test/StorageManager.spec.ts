@@ -77,7 +77,7 @@ describe('StorageManager', () => {
 
   test('getSize() should get the total size of localStorage', () => {
     SM.set('key-size', 'myValue');
-    const expectedStr = `[YIN%${JSON.stringify({ value: 'myValue' })}%PO]`
+    const expectedStr = `${StorageManager.dataPrefix}${JSON.stringify({ value: 'myValue' })}${StorageManager.dataSuffix}`
     const expectedSize = expectedStr.length * 2 / 1024; // size in KB
     expect(SM.getSize()).toBe(expectedSize);
   });
@@ -85,7 +85,7 @@ describe('StorageManager', () => {
   test('getRemainingSize() should get the remaining size of localStorage', () => {
     const initialSize = SM.getSize();
     SM.set('key-remaining-size', 'myValue');
-    const expectedStr = `[YIN%${JSON.stringify({ value: 'myValue' })}%PO]`
+    const expectedStr = `${StorageManager.dataPrefix}${JSON.stringify({ value: 'myValue' })}${StorageManager.dataSuffix}`
     const sizeIncrease = expectedStr.length * 2 / 1024; // size in KB
     expect(SM.getRemainingSize()).toBe(StorageManager.storageSizeLimit - initialSize - sizeIncrease); // size in KB
   });
