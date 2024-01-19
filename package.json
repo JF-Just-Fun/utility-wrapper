@@ -13,7 +13,8 @@
   "scripts": {
     "test": "jest",
     "prepare": "husky install",
-    "build": "node ./scripts/exportAll.js && rollup -c"
+    "build": "node ./scripts/exportAll.js && rollup -c",
+    "pub": "npm version patch"
   },
   "repository": {
     "type": "git",
