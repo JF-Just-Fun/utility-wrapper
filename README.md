@@ -1,4 +1,5 @@
 # utility-wrapper
+
 ## Purpose
 
 Encapsulate some common and practical functions or classes.
@@ -7,23 +8,25 @@ Encapsulate some common and practical functions or classes.
 
 Every directory in ./src is considered a module and must contain an index.ts file.
 
-You do not need to manually write ./index.ts; running npm run build will generate it automatically.
-
+You do not need to manually write `src/index.ts`; running npm run build will generate it automatically.
 
 ## Usage
+
 1. installation
+
 ```shell
 npm i utility-wrapper
 ```
 
 2. import
+
 ```ts
 
 ```
 
 ## Development
 
-### git branch
+## Publish
 
 Pushing code to the main branch automatically triggers a git action update to npm
 https://www.npmjs.com/package/utility-wrapper
